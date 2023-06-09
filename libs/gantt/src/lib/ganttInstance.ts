@@ -47,16 +47,13 @@ export class GanttInstance implements ISchedule {
         //@ts-ignore
         if(this.ganttRef && this.ganttRef.ganttInstance){
             try{
-                const data = dataSet;
-                setTimeout(async ()=>{
-                    //@ts-ignore
-                    this.importerInstance.setGanttInstance(this.ganttRef.ganttInstance);
-                    this.importerInstance.setDefaultColumns(this.columnDef);
-                    await this.importerInstance.importData(data);
-                    this.addToolbarButtons();
-                    this.activitySearchFilterOption();
-                },6000);
-
+                const data = await this.getMockData();
+                //@ts-ignore
+                this.importerInstance.setGanttInstance(this.ganttRef.ganttInstance);
+                this.importerInstance.setDefaultColumns(this.columnDef);
+                await this.importerInstance.importData(data);
+                this.addToolbarButtons();
+                this.activitySearchFilterOption();
                 //uncomment this to see the enddate discrepancy
                 // this.ganttRef.instance.project.resourceStore.add(new this.ganttRef.instance.project.resourceStore.modelClass({
                 //     'id' : 1234,
@@ -65,7 +62,7 @@ export class GanttInstance implements ISchedule {
                 // }));
                 
                 // or uncomment this to see the enddate discrepancy
-                //await this.ganttRef?.instance?.project?.commitAsync();
+                // await this.ganttRef?.instance?.project?.commitAsync();
 
             }catch(error){
                 //TODO --> need to show error to the user
@@ -78,6 +75,14 @@ export class GanttInstance implements ISchedule {
                 })
             }
         }
+    }
+
+    getMockData (){
+        return new Promise((resolve)=>{
+            setTimeout(()=>{
+                resolve(dataSet);
+            },4000);
+        });    
     }
 
     getGanttInstance(){
